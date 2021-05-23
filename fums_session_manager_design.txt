@@ -1,0 +1,47 @@
+HIGH LEVEL DESIGN FOR SESSION MANAGER
+
+Device packages:
+1. Rest
+2. Kafka
+3. Device Packages > Vendor Packages > Model Packages
+4. Utility
+
+Device Packages:
+	Base_package.py:
+		Use paramiko or pexpect
+		Methods = connect via telnet and ssh, disconnect, send_commands etc
+Vendor Packages:
+	fujitsu.py:
+		vendor specific requirements like ACT-USER, CANCEL USER
+		
+Model Packages:
+	s100.py:
+		Model specific requirements
+		
+s100 inherits from fujitsu. fujitsu inherits from Base_package
+
+Utility: Contains the supporting functions
+
+session_manager.py:
+	The actual script to maintain the sessions and all the requirements specified.
+	
+	* Infinite loop
+	* Send alive messages
+	* Kafka (Picks up the commands from VM2):
+		Send the command, kafka topic, CTAG etc to the Job_handler
+		
+Job_handler:
+	Executes the commands parallely.
+	For every command, a separate thread is created, send_commands is called.
+	After executing the command publish the response to the kakfa topic received.
+	thread is terminated and return
+	
+	
+ETA:
+Creating all the packages: 30 days
+Session Manager: 30 days
+VM2: 15 days
+Buffer: 10 days
+		
+	
+	
