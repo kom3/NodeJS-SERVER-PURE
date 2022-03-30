@@ -34,6 +34,7 @@ http.createServer((req, res)=>{
 // File operations: Read file
 
 http.createServer((req, res)=>{
+    // Add conditions to check the route and based on that handle the request
     fs.readFile('mytextfile.html', (err, data)=>{
         res.writeHead(200, {'Content-Type':'text/html'})
         res.write(data)
